@@ -9,11 +9,6 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        .logo {
-            display: block;
-            margin: 0 auto 20px;
-            width: 100px; /* Adjust the width as needed */
-        }
         .input-field {
             margin-bottom: 10px;
         }
@@ -24,11 +19,11 @@
         .input-field input {
             width: 200px;
         }
-        .input-field img {
-            width: 20px;
-            height: 20px;
+        .copy-text {
+            color: blue;
+            text-decoration: underline;
             cursor: pointer;
-            vertical-align: middle;
+            margin-left: 10px;
         }
         .calculate-btn {
             background-color: #ffd700; /* Gold color */
@@ -40,32 +35,31 @@
     </style>
 </head>
 <body>
-    <img src="https://www.pinnacleteam.com/assets/img/logo.png" alt="Pinnacle Team Logo" class="logo">
     <h1>Easy Quote Tool</h1>
     <div class="input-field">
         <label for="truckCost">Truck Cost:</label>
         <input type="number" id="truckCost" required oninput="updateCalculations()" min="1" max="20000">
-        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('truckCost')">
+        <span class="copy-text" onclick="copyToClipboard('truckCost')">copy</span>
     </div>
     <div class="input-field">
         <label for="markupPercent">Markup %:</label>
-        <input type="number" id="markupPercent" oninput="updateCalculations()" min="1" max="100">
-        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('markupPercent')">
+        <input type="number" id="markupPercent" oninput="updateCalculations()">
+        <span class="copy-text" onclick="copyToClipboard('markupPercent')">copy</span>
     </div>
     <div class="input-field">
         <label for="marginPercent">Margin %:</label>
-        <input type="number" id="marginPercent" oninput="updateCalculations()" min="1" max="100">
-        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('marginPercent')">
+        <input type="number" id="marginPercent" oninput="updateCalculations()">
+        <span class="copy-text" onclick="copyToClipboard('marginPercent')">copy</span>
     </div>
     <div class="input-field">
         <label for="marginAmount">Margin Amount:</label>
         <input type="number" id="marginAmount" oninput="updateCalculations()">
-        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('marginAmount')">
+        <span class="copy-text" onclick="copyToClipboard('marginAmount')">copy</span>
     </div>
     <div class="input-field">
         <label for="revenue">Revenue:</label>
         <input type="number" id="revenue" oninput="updateCalculations()">
-        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('revenue')">
+        <span class="copy-text" onclick="copyToClipboard('revenue')">copy</span>
     </div>
 
     <script>
@@ -87,14 +81,20 @@
             if (isNaN(marginAmount)) document.getElementById('marginAmount').value = '';
             if (isNaN(revenue)) document.getElementById('revenue').value = '';
 
-            if (!isNaN(markupPercent) && markupPercent >= 0 && markupPercent <= 100) {
+            if (!isNaN(markupPercent)) {
+                if (markupPercent < 0 || markupPercent > 100) {
+                    alert("Warning: Markup % should ideally be between 0 and 100.");
+                }
                 const marginAmountCalc = Math.round((markupPercent / 100) * truckCost);
                 const revenueCalc = Math.round(truckCost + marginAmountCalc);
 
                 document.getElementById('marginAmount').value = marginAmountCalc;
                 document.getElementById('revenue').value = revenueCalc;
                 document.getElementById('marginPercent').value = Math.round((marginAmountCalc / revenueCalc) * 100);
-            } else if (!isNaN(marginPercent) && marginPercent >= 0 && marginPercent <= 100) {
+            } else if (!isNaN(marginPercent)) {
+                if (marginPercent < 0 || marginPercent > 100) {
+                    alert("Warning: Margin % should ideally be between 0 and 100.");
+                }
                 const revenueCalc = Math.round(truckCost / (1 - (marginPercent / 100)));
                 const marginAmountCalc = Math.round(revenueCalc - truckCost);
 
