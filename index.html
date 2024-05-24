@@ -18,18 +18,6 @@
         }
         .input-field input {
             width: 200px;
-            padding-left: 20px; /* to accommodate dollar sign */
-        }
-        .input-field input.dollar::before {
-            content: "$";
-            position: absolute;
-            margin-left: -15px;
-        }
-        .copy-text {
-            color: blue;
-            text-decoration: underline;
-            cursor: pointer;
-            margin-left: 10px;
         }
         .calculate-btn, .clear-btn {
             background-color: #ffd700; /* Gold color */
@@ -45,28 +33,23 @@
     <h1>Easy Quote Tool</h1>
     <div class="input-field">
         <label for="truckCost">Truck Cost:</label>
-        <input type="number" id="truckCost" class="dollar" required oninput="updateCalculations()" min="1" max="20000">
-        <span class="copy-text" onclick="copyToClipboard('truckCost')">copy</span>
+        <input type="number" id="truckCost" required oninput="updateCalculations()" min="1" max="20000">
     </div>
     <div class="input-field">
         <label for="markupPercent">Markup %:</label>
         <input type="number" id="markupPercent" oninput="updateCalculations()">
-        <span class="copy-text" onclick="copyToClipboard('markupPercent')">copy</span>
     </div>
     <div class="input-field">
         <label for="marginPercent">Margin %:</label>
         <input type="number" id="marginPercent" oninput="updateCalculations()">
-        <span class="copy-text" onclick="copyToClipboard('marginPercent')">copy</span>
     </div>
     <div class="input-field">
         <label for="marginAmount">Margin Amount:</label>
-        <input type="number" id="marginAmount" class="dollar" oninput="updateCalculations()">
-        <span class="copy-text" onclick="copyToClipboard('marginAmount')">copy</span>
+        <input type="number" id="marginAmount" oninput="updateCalculations()">
     </div>
     <div class="input-field">
         <label for="revenue">Revenue:</label>
-        <input type="number" id="revenue" class="dollar" oninput="updateCalculations()">
-        <span class="copy-text" onclick="copyToClipboard('revenue')">copy</span>
+        <input type="number" id="revenue" oninput="updateCalculations()">
     </div>
     <button class="clear-btn" onclick="clearValues()">Clear All</button>
 
@@ -122,14 +105,6 @@
                 document.getElementById('markupPercent').value = Math.round((marginAmountCalc / truckCost) * 100);
                 document.getElementById('marginPercent').value = Math.round((marginAmountCalc / revenue) * 100);
             }
-        }
-
-        function copyToClipboard(elementId) {
-            const copyText = document.getElementById(elementId);
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); // For mobile devices
-            document.execCommand("copy");
-            alert("Copied the text: " + copyText.value);
         }
 
         function clearValues() {
