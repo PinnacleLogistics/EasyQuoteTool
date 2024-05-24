@@ -18,6 +18,7 @@
         }
         .input-field input {
             width: 200px;
+            padding-left: 5px;
         }
         .calculate-btn, .clear-btn {
             background-color: #ffd700; /* Gold color */
@@ -33,7 +34,7 @@
     <h1>Easy Quote Tool</h1>
     <div class="input-field">
         <label for="truckCost">Truck Cost:</label>
-        <input type="number" id="truckCost" required onblur="updateCalculations()" min="1" max="20000">
+        <input type="text" id="truckCost" required onblur="updateCalculations()">
     </div>
     <div class="input-field">
         <label for="markupPercent">Markup %:</label>
@@ -45,21 +46,29 @@
     </div>
     <div class="input-field">
         <label for="marginAmount">Margin Amount:</label>
-        <input type="number" id="marginAmount" onblur="updateCalculations()">
+        <input type="text" id="marginAmount" onblur="updateCalculations()">
     </div>
     <div class="input-field">
         <label for="revenue">Revenue:</label>
-        <input type="number" id="revenue" onblur="updateCalculations()">
+        <input type="text" id="revenue" onblur="updateCalculations()">
     </div>
     <button class="clear-btn" onclick="clearValues()">Clear All</button>
 
     <script>
+        function formatCurrency(value) {
+            return '$' + value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
+        function parseCurrency(value) {
+            return parseFloat(value.replace(/[^0-9.-]+/g, ""));
+        }
+
         function updateCalculations() {
-            const truckCost = parseFloat(document.getElementById('truckCost').value);
+            const truckCost = parseCurrency(document.getElementById('truckCost').value);
             const markupPercent = parseFloat(document.getElementById('markupPercent').value);
             const marginPercent = parseFloat(document.getElementById('marginPercent').value);
-            const marginAmount = parseFloat(document.getElementById('marginAmount').value);
-            const revenue = parseFloat(document.getElementById('revenue').value);
+            const marginAmount = parseCurrency(document.getElementById('marginAmount').value);
+            const revenue = parseCurrency(document.getElementById('revenue').value);
 
             if (isNaN(truckCost) || truckCost < 1 || truckCost > 20000) {
                 alert("Please enter a valid Truck Cost between $1 and $20,000.");
@@ -79,8 +88,8 @@
                 const marginAmountCalc = Math.round((markupPercent / 100) * truckCost);
                 const revenueCalc = Math.round(truckCost + marginAmountCalc);
 
-                document.getElementById('marginAmount').value = marginAmountCalc;
-                document.getElementById('revenue').value = revenueCalc;
+                document.getElementById('marginAmount').value = formatCurrency(marginAmountCalc);
+                document.getElementById('revenue').value = formatCurrency(revenueCalc);
                 document.getElementById('marginPercent').value = Math.round((marginAmountCalc / revenueCalc) * 100);
             } else if (!isNaN(marginPercent)) {
                 if (marginPercent < 0 || marginPercent > 100) {
@@ -89,22 +98,24 @@
                 const revenueCalc = Math.round(truckCost / (1 - (marginPercent / 100)));
                 const marginAmountCalc = Math.round(revenueCalc - truckCost);
 
-                document.getElementById('revenue').value = revenueCalc;
-                document.getElementById('marginAmount').value = marginAmountCalc;
+                document.getElementById('revenue').value = formatCurrency(revenueCalc);
+                document.getElementById('marginAmount').value = formatCurrency(marginAmountCalc);
                 document.getElementById('markupPercent').value = Math.round((marginAmountCalc / truckCost) * 100);
             } else if (!isNaN(marginAmount) && marginAmount >= 0) {
                 const revenueCalc = Math.round(truckCost + marginAmount);
 
-                document.getElementById('revenue').value = revenueCalc;
+                document.getElementById('revenue').value = formatCurrency(revenueCalc);
                 document.getElementById('markupPercent').value = Math.round((marginAmount / truckCost) * 100);
                 document.getElementById('marginPercent').value = Math.round((marginAmount / revenueCalc) * 100);
             } else if (!isNaN(revenue) && revenue >= 0) {
                 const marginAmountCalc = Math.round(revenue - truckCost);
 
-                document.getElementById('marginAmount').value = marginAmountCalc;
+                document.getElementById('marginAmount').value = formatCurrency(marginAmountCalc);
                 document.getElementById('markupPercent').value = Math.round((marginAmountCalc / truckCost) * 100);
                 document.getElementById('marginPercent').value = Math.round((marginAmountCalc / revenue) * 100);
             }
+
+            document.getElementById('truckCost').value = formatCurrency(truckCost);
         }
 
         function clearValues() {
