@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Quote Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            width: 100px; /* Adjust the width as needed */
+        }
+        .input-field {
+            margin-bottom: 10px;
+        }
+        .input-field label {
+            display: inline-block;
+            width: 150px;
+        }
+        .input-field input {
+            width: 200px;
+        }
+        .input-field img {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+        .calculate-btn {
+            background-color: #ffd700; /* Gold color */
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://www.pinnacleteam.com/assets/img/logo.png" alt="Pinnacle Team Logo" class="logo">
+    <h1>Easy Quote Tool</h1>
+    <div class="input-field">
+        <label for="truckCost">Truck Cost:</label>
+        <input type="number" id="truckCost" required oninput="updateCalculations()" min="1" max="20000">
+        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('truckCost')">
+    </div>
+    <div class="input-field">
+        <label for="markupPercent">Markup %:</label>
+        <input type="number" id="markupPercent" oninput="updateCalculations()">
+        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('markupPercent')">
+    </div>
+    <div class="input-field">
+        <label for="marginPercent">Margin %:</label>
+        <input type="number" id="marginPercent" oninput="updateCalculations()">
+        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('marginPercent')">
+    </div>
+    <div class="input-field">
+        <label for="marginAmount">Margin Amount:</label>
+        <input type="number" id="marginAmount" oninput="updateCalculations()">
+        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('marginAmount')">
+    </div>
+    <div class="input-field">
+        <label for="revenue">Revenue:</label>
+        <input type="number" id="revenue" oninput="updateCalculations()">
+        <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('revenue')">
+    </div>
+
+    <script>
+        function updateCalculations() {
+            const truckCost = parseFloat(document.getElementById('truckCost').value);
+            const markupPercent = parseFloat(document.getElementById('markupPercent').value);
+            const marginPercent = parseFloat(document.getElementById('marginPercent').value);
+            const marginAmount = parseFloat(document.getElementById('marginAmount').value);
+            const revenue = parseFloat(document.getElementById('revenue').value);
+
+            if (isNaN(truckCost) || truckCost < 1 || truckCost > 20000) {
+                alert("Please enter a valid Truck Cost between $1 and $20,000.");
+                return;
+            }
+
+            // Clear other fields to prevent incorrect calculations
+            document.getElementById('markupPercent').value = isNaN(markupPercent) ? '' : markupPercent;
+            document.getElementById('marginPercent').value = isNaN(marginPercent) ? '' : marginPercent;
+            document.getElementById('marginAmount').value = isNaN(marginAmount) ? '' : marginAmount;
+            document.getElementById('revenue').value = isNaN(revenue) ? '' : revenue;
+
+            if (!isNaN(markupPercent)) {
+                const marginAmountCalc = Math.round((markupPercent / 100) * truckCost);
+                const revenueCalc = Math.round(truckCost + marginAmountCalc);
+
+                document.getElementById('marginAmount').value = marginAmountCalc;
+                document.getElementById('revenue').value = revenueCalc;
+                document.getElementById('marginPercent').value = Math.round((marginAmountCalc / revenueCalc) * 100);
+            } else if (!isNaN(marginPercent)) {
+                const revenueCalc = Math.round(truckCost / (1 - (marginPercent / 100)));
+                const marginAmountCalc = Math.round(revenueCalc - truckCost);
+
+                document.getElementById('revenue').value = revenueCalc;
+                document.getElementById('marginAmount').value = marginAmountCalc;
+                document.getElementById('markupPercent').value = Math.round((marginAmountCalc / truckCost) * 100);
+            } else if (!isNaN(marginAmount)) {
+                const revenueCalc = Math.round(truckCost + marginAmount);
+
+                document.getElementById('revenue').value = revenueCalc;
+                document.getElementById('markupPercent').value = Math.round((marginAmount / truckCost) * 100);
+                document.getElementById('marginPercent').value = Math.round((marginAmount / revenueCalc) * 100);
+            } else if (!isNaN(revenue)) {
+                const marginAmountCalc = Math.round(revenue - truckCost);
+
+                document.getElementById('marginAmount').value = marginAmountCalc;
+                document.getElementById('markupPercent').value = Math.round((marginAmountCalc / truckCost) * 100);
+                document.getElementById('marginPercent').value = Math.round((marginAmountCalc / revenue) * 100);
+            }
+        }
+
+        function copyToClipboard(elementId) {
+            const copyText = document.getElementById(elementId);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy");
+            alert("Copied the text: " + copyText.value);
+        }
+    </script>
+</body>
+</html>
