@@ -18,6 +18,12 @@
         }
         .input-field input {
             width: 200px;
+            padding-left: 20px; /* to accommodate dollar sign */
+        }
+        .input-field input.dollar::before {
+            content: "$";
+            position: absolute;
+            margin-left: -15px;
         }
         .copy-text {
             color: blue;
@@ -25,12 +31,13 @@
             cursor: pointer;
             margin-left: 10px;
         }
-        .calculate-btn {
+        .calculate-btn, .clear-btn {
             background-color: #ffd700; /* Gold color */
             color: #000;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -38,7 +45,7 @@
     <h1>Easy Quote Tool</h1>
     <div class="input-field">
         <label for="truckCost">Truck Cost:</label>
-        <input type="number" id="truckCost" required oninput="updateCalculations()" min="1" max="20000">
+        <input type="number" id="truckCost" class="dollar" required oninput="updateCalculations()" min="1" max="20000">
         <span class="copy-text" onclick="copyToClipboard('truckCost')">copy</span>
     </div>
     <div class="input-field">
@@ -53,14 +60,15 @@
     </div>
     <div class="input-field">
         <label for="marginAmount">Margin Amount:</label>
-        <input type="number" id="marginAmount" oninput="updateCalculations()">
+        <input type="number" id="marginAmount" class="dollar" oninput="updateCalculations()">
         <span class="copy-text" onclick="copyToClipboard('marginAmount')">copy</span>
     </div>
     <div class="input-field">
         <label for="revenue">Revenue:</label>
-        <input type="number" id="revenue" oninput="updateCalculations()">
+        <input type="number" id="revenue" class="dollar" oninput="updateCalculations()">
         <span class="copy-text" onclick="copyToClipboard('revenue')">copy</span>
     </div>
+    <button class="clear-btn" onclick="clearValues()">Clear All</button>
 
     <script>
         function updateCalculations() {
@@ -122,6 +130,14 @@
             copyText.setSelectionRange(0, 99999); // For mobile devices
             document.execCommand("copy");
             alert("Copied the text: " + copyText.value);
+        }
+
+        function clearValues() {
+            document.getElementById('truckCost').value = '';
+            document.getElementById('markupPercent').value = '';
+            document.getElementById('marginPercent').value = '';
+            document.getElementById('marginAmount').value = '';
+            document.getElementById('revenue').value = '';
         }
     </script>
 </body>
