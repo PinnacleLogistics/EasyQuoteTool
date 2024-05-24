@@ -33,23 +33,23 @@
     <h1>Easy Quote Tool</h1>
     <div class="input-field">
         <label for="truckCost">Truck Cost:</label>
-        <input type="number" id="truckCost" required oninput="updateCalculations()" min="1" max="20000">
+        <input type="number" id="truckCost" required onblur="updateCalculations()" min="1" max="20000">
     </div>
     <div class="input-field">
         <label for="markupPercent">Markup %:</label>
-        <input type="number" id="markupPercent" oninput="updateCalculations()">
+        <input type="number" id="markupPercent" onblur="updateCalculations()">
     </div>
     <div class="input-field">
         <label for="marginPercent">Margin %:</label>
-        <input type="number" id="marginPercent" oninput="updateCalculations()">
+        <input type="number" id="marginPercent" onblur="updateCalculations()">
     </div>
     <div class="input-field">
         <label for="marginAmount">Margin Amount:</label>
-        <input type="number" id="marginAmount" oninput="updateCalculations()">
+        <input type="number" id="marginAmount" onblur="updateCalculations()">
     </div>
     <div class="input-field">
         <label for="revenue">Revenue:</label>
-        <input type="number" id="revenue" oninput="updateCalculations()">
+        <input type="number" id="revenue" onblur="updateCalculations()">
     </div>
     <button class="clear-btn" onclick="clearValues()">Clear All</button>
 
