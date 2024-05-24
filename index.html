@@ -49,12 +49,12 @@
     </div>
     <div class="input-field">
         <label for="markupPercent">Markup %:</label>
-        <input type="number" id="markupPercent" oninput="updateCalculations()">
+        <input type="number" id="markupPercent" oninput="updateCalculations()" min="1" max="100">
         <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('markupPercent')">
     </div>
     <div class="input-field">
         <label for="marginPercent">Margin %:</label>
-        <input type="number" id="marginPercent" oninput="updateCalculations()">
+        <input type="number" id="marginPercent" oninput="updateCalculations()" min="1" max="100">
         <img src="/mnt/data/image.png" alt="Copy" onclick="copyToClipboard('marginPercent')">
     </div>
     <div class="input-field">
@@ -82,32 +82,32 @@
             }
 
             // Clear other fields to prevent incorrect calculations
-            document.getElementById('markupPercent').value = isNaN(markupPercent) ? '' : markupPercent;
-            document.getElementById('marginPercent').value = isNaN(marginPercent) ? '' : marginPercent;
-            document.getElementById('marginAmount').value = isNaN(marginAmount) ? '' : marginAmount;
-            document.getElementById('revenue').value = isNaN(revenue) ? '' : revenue;
+            if (isNaN(markupPercent)) document.getElementById('markupPercent').value = '';
+            if (isNaN(marginPercent)) document.getElementById('marginPercent').value = '';
+            if (isNaN(marginAmount)) document.getElementById('marginAmount').value = '';
+            if (isNaN(revenue)) document.getElementById('revenue').value = '';
 
-            if (!isNaN(markupPercent)) {
+            if (!isNaN(markupPercent) && markupPercent >= 0 && markupPercent <= 100) {
                 const marginAmountCalc = Math.round((markupPercent / 100) * truckCost);
                 const revenueCalc = Math.round(truckCost + marginAmountCalc);
 
                 document.getElementById('marginAmount').value = marginAmountCalc;
                 document.getElementById('revenue').value = revenueCalc;
                 document.getElementById('marginPercent').value = Math.round((marginAmountCalc / revenueCalc) * 100);
-            } else if (!isNaN(marginPercent)) {
+            } else if (!isNaN(marginPercent) && marginPercent >= 0 && marginPercent <= 100) {
                 const revenueCalc = Math.round(truckCost / (1 - (marginPercent / 100)));
                 const marginAmountCalc = Math.round(revenueCalc - truckCost);
 
                 document.getElementById('revenue').value = revenueCalc;
                 document.getElementById('marginAmount').value = marginAmountCalc;
                 document.getElementById('markupPercent').value = Math.round((marginAmountCalc / truckCost) * 100);
-            } else if (!isNaN(marginAmount)) {
+            } else if (!isNaN(marginAmount) && marginAmount >= 0) {
                 const revenueCalc = Math.round(truckCost + marginAmount);
 
                 document.getElementById('revenue').value = revenueCalc;
                 document.getElementById('markupPercent').value = Math.round((marginAmount / truckCost) * 100);
                 document.getElementById('marginPercent').value = Math.round((marginAmount / revenueCalc) * 100);
-            } else if (!isNaN(revenue)) {
+            } else if (!isNaN(revenue) && revenue >= 0) {
                 const marginAmountCalc = Math.round(revenue - truckCost);
 
                 document.getElementById('marginAmount').value = marginAmountCalc;
