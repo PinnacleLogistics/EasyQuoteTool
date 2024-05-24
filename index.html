@@ -70,11 +70,6 @@
             const marginAmount = parseCurrency(document.getElementById('marginAmount').value);
             const revenue = parseCurrency(document.getElementById('revenue').value);
 
-            if (isNaN(truckCost) || truckCost < 1 || truckCost > 20000) {
-                alert("Please enter a valid Truck Cost between $1 and $20,000.");
-                return;
-            }
-
             // Clear other fields to prevent incorrect calculations
             if (isNaN(markupPercent)) document.getElementById('markupPercent').value = '';
             if (isNaN(marginPercent)) document.getElementById('marginPercent').value = '';
