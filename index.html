@@ -56,7 +56,7 @@
 
     <script>
         function formatCurrency(value) {
-            return '$' + Math.round(value).toLocaleString();
+            return '$' + value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
 
         function parseCurrency(value) {
@@ -80,8 +80,8 @@
                 if (markupPercent < 0 || markupPercent > 100) {
                     alert("Warning: Markup % should ideally be between 0 and 100.");
                 }
-                const marginAmountCalc = Math.round((markupPercent / 100) * truckCost);
-                const revenueCalc = Math.round(truckCost + marginAmountCalc);
+                const marginAmountCalc = (markupPercent / 100) * truckCost;
+                const revenueCalc = truckCost + marginAmountCalc;
 
                 document.getElementById('marginAmount').value = formatCurrency(marginAmountCalc);
                 document.getElementById('revenue').value = formatCurrency(revenueCalc);
@@ -90,20 +90,20 @@
                 if (marginPercent < 0 || marginPercent > 100) {
                     alert("Warning: Margin % should ideally be between 0 and 100.");
                 }
-                const revenueCalc = Math.round(truckCost / (1 - (marginPercent / 100)));
-                const marginAmountCalc = Math.round(revenueCalc - truckCost);
+                const revenueCalc = truckCost / (1 - (marginPercent / 100));
+                const marginAmountCalc = revenueCalc - truckCost;
 
                 document.getElementById('revenue').value = formatCurrency(revenueCalc);
                 document.getElementById('marginAmount').value = formatCurrency(marginAmountCalc);
                 document.getElementById('markupPercent').value = ((marginAmountCalc / truckCost) * 100).toFixed(1);
             } else if (!isNaN(marginAmount) && marginAmount >= 0) {
-                const revenueCalc = Math.round(truckCost + marginAmount);
+                const revenueCalc = truckCost + marginAmount;
 
                 document.getElementById('revenue').value = formatCurrency(revenueCalc);
                 document.getElementById('markupPercent').value = ((marginAmount / truckCost) * 100).toFixed(1);
                 document.getElementById('marginPercent').value = ((marginAmount / revenueCalc) * 100).toFixed(1);
             } else if (!isNaN(revenue) && revenue >= 0) {
-                const marginAmountCalc = Math.round(revenue - truckCost);
+                const marginAmountCalc = revenue - truckCost;
 
                 document.getElementById('marginAmount').value = formatCurrency(marginAmountCalc);
                 document.getElementById('markupPercent').value = ((marginAmountCalc / truckCost) * 100).toFixed(1);
