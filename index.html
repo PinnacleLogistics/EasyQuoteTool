@@ -111,6 +111,11 @@
             }
 
             document.getElementById('truckCost').value = formatCurrency(truckCost);
+            if (Number.isInteger(truckCost)) {
+                document.getElementById('truckCost').value = truckCost.toLocaleString();
+            } else {
+                document.getElementById('truckCost').value = truckCost.toFixed(2).toLocaleString();
+            }
         }
 
         function clearValues() {
